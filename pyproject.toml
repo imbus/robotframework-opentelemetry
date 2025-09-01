@@ -1,14 +1,53 @@
 [project]
 name = "robotframework-opentelemetry"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.1.0a1"
+description = "OpenTelemetry listener for Robot Framework test execution metrics and traces"
 readme = "README.md"
+license = { text = "EUPL-1.2" }
+authors = [
+    { name = "Paul Wieland", email = "paul.wieland@imbus.de" },
+    { name = "Markus Stahl", email = "markus.stahl@imbus.de" },
+]
+maintainers = [
+    { name = "Paul Wieland", email = "paul.wieland@imbus.de" },
+    { name = "Markus Stahl", email = "markus.stahl@imbus.de" },
+]
+keywords = [
+    "robotframework",
+    "opentelemetry",
+    "testing",
+    "metrics",
+    "tracing",
+    "observability",
+]
 requires-python = ">=3.13"
 dependencies = [
     "opentelemetry-exporter-otlp-proto-http>=1.36.0",
     "opentelemetry-sdk>=1.36.0",
     "robotframework>=7.3.2",
 ]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Monitoring",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/imbus/robotframework-opentelemetry"
+Repository = "https://github.com/imbus/robotframework-opentelemetry"
+Documentation = "https://github.com/imbus/robotframework-opentelemetry#readme"
+Changelog = "https://github.com/imbus/robotframework-opentelemetry/releases"
+"Bug Reports" = "https://github.com/imbus/robotframework-opentelemetry/issues"
+"Source Code" = "https://github.com/imbus/robotframework-opentelemetry"
 
 [dependency-groups]
 dev = ["robotcode>=1.8.0", "ruff>=0.12.11"]
