@@ -1,33 +1,31 @@
-image: python:latest
-
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  UV_VERSION: "0.8.3"           # Set uv version
+  PYTHON_VERSION: "3.13"      # Python version in use
+  BASE_LAYER: "bookworm-slim" # Debian base image variant for uv image
+  UV_LINK_MODE: "copy"        # Required due to GitLab mount behavior
   COL_RECEIVER_OTLP_ENDPOINT: "0.0.0.0:1234"
   COL_RECEIVER_HTTP_ENDPOINT: "0.0.0.0:1235"
   COL_EXPORTER_OTLPHTTP_ENDPOINT: "http://0.0.0.0:1236"
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://0.0.0.0:1235"
 
+image: ghcr.io/astral-sh/uv:$UV_VERSION-python$PYTHON_VERSION-$BASE_LAYER
 
 cache:
-    paths:
-        - .cache/pip
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .venv/
 
-before_script:
-    - python --version ; pip --version # for debugging
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - pip install -r requirements.txt
-    - pip install -r requirements_test.txt
-    - apt update
-    - apt-get -y install wget
-    - wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.131.0/otelcol_0.131.0_linux_amd64.deb
-    - dpkg -i otelcol_0.131.0_linux_amd64.deb
-    - otelcol validate --config=test/opencol_test_conf.yaml
-    - otelcol --config=test/opencol_test_conf.yaml &> otelcol_log.txt &
-    - python -c "import time; time.sleep(5)" # to make sure the collector has time to start. Don't know how to do this in linux
-
-test:
+Pytest:
+    before_script:
+        - uv sync --no-dev --group test
+        - source .venv/bin/activate
+        - apt update
+        - apt-get -y install wget
+        - wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.131.0/otelcol_0.131.0_linux_amd64.deb
+        - dpkg -i otelcol_0.131.0_linux_amd64.deb
+        - otelcol validate --config=test/opencol_test_conf.yaml
+        - otelcol --config=test/opencol_test_conf.yaml &> otelcol_log.txt &
+        - python -c "import time; time.sleep(5)" # to make sure the collector has time to start. Don't know how to do this in linux
     script:
         - pytest --junitxml=pytest_report.xml
     artifacts:

@@ -1,0 +1,15 @@
+[project]
+name = "robotframework-opentelemetry"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "opentelemetry-exporter-otlp-proto-http>=1.36.0",
+    "opentelemetry-sdk>=1.36.0",
+    "robotframework>=7.3.2",
+]
+
+[dependency-groups]
+dev = ["robotcode>=1.8.0", "ruff>=0.12.11"]
+test = ["flask>=3.1.2", "pytest>=8.4.1"]
