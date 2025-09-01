@@ -1,0 +1,51 @@
+# Modified default config for testing the listener
+#
+# To limit exposure to denial of service attacks, change the host in endpoints below from 0.0.0.0 to a specific network interface.
+# See https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: ${env:COL_RECEIVER_OTLP_ENDPOINT} # 0.0.0.0:1234
+      http:
+        endpoint: ${env:COL_RECEIVER_HTTP_ENDPOINT} # 0.0.0.0:1235
+
+processors:
+  batch:
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  otlphttp:
+    endpoint: ${env:COL_EXPORTER_OTLPHTTP_ENDPOINT} # http://0.0.0.0:1236
+    # compression: none
+    # headers:
+    #     Content-Type: application/json
+
+service:
+
+  pipelines:
+
+    traces:
+      receivers: [otlp]
+      # processors: [batch]
+      exporters: [debug, otlphttp]
+
+    metrics:
+      receivers: [otlp]
+      # processors: [batch]
+      exporters: [debug, otlphttp]
+
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
+
+  extensions: [health_check, pprof, zpages]

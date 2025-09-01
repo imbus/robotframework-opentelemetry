@@ -1,0 +1,4 @@
+extend-python-path = ["OpenTelemetryListener"]
+
+[listeners]
+OpenTelemetryListener = ["http://localhost:4318"]

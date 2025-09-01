@@ -1,0 +1,3 @@
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+robotframework >= 7.0
